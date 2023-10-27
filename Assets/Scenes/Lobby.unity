@@ -404,8 +404,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   loadingCanvas: {fileID: 8559165107860216232, guid: 4c5ed6d282bd24f429ff463afb406c14, type: 3}
+  createNicknamePanel: {fileID: 3481383399912595499}
+  joinRoomPanel: {fileID: 3481383399001504080}
+  setNicknameInputField: {fileID: 3481383400446962389}
   createRoomNameInputField: {fileID: 3481383399192255040}
   joinRoomNameInputField: {fileID: 3481383400084828651}
+  setNicknameBtn: {fileID: 3481383400244792990}
   createRoomBtn: {fileID: 3481383400432092179}
   joinRoomBtn: {fileID: 3481383400089737528}
   joinRandomRoomBtn: {fileID: 3481383399773131345}
@@ -817,7 +821,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3481383399001504111
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2541,7 +2545,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!222 &3481383400084828649
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -11,9 +11,14 @@ public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
     public event Action OnStartedRunnerConnection;
     public event Action OnPlayerJoinedSucessfully;
 
+    public string LocalPlayerName { get; private set; }
     [SerializeField] private NetworkRunner networkRunnerPrefab;
 
     private NetworkRunner networkRunnerInstance;
+    public void SetPlayerNickname(string str)
+    {
+        LocalPlayerName = str;
+    }
     public async void StartGame(GameMode mode, string roomName)
     {
         OnStartedRunnerConnection?.Invoke();
@@ -25,7 +30,7 @@ public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
 
         networkRunnerInstance.AddCallbacks(this);
 
-        //networkRunnerInstance.ProvideInput = true;
+        networkRunnerInstance.ProvideInput = true;
 
         var startGameArgs = new StartGameArgs()
         {
@@ -45,7 +50,6 @@ public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
         {
             //not so cool
         }
-        //networkRunnerInstance.ProvideInput = true;
     }
     public void ShutDownRunner()
     {
