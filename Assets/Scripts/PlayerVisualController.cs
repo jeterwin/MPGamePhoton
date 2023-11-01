@@ -13,6 +13,9 @@ public class PlayerVisualController : MonoBehaviour
     private Vector3 originalLocalScale;
     private bool init = false;
 
+    private readonly int isMovingHash = Animator.StringToHash("IsWalking");
+    private readonly int isShootingHash = Animator.StringToHash("IsShooting");
+
     private void Start()
     {
         originalLocalScale = transform.localScale;
@@ -20,14 +23,22 @@ public class PlayerVisualController : MonoBehaviour
 
         init = true;
     }
-    private readonly int isMovingHash = Animator.StringToHash("IsWalking");
-    public void RendererVisuals(Vector2 velocity)
+    public void TriggerDeath()
+    {
+        animator.SetTrigger("Death");
+    }
+    public void TriggerRespawn()
+    {
+        animator.SetTrigger("Respawn");
+    }
+    public void RendererVisuals(Vector2 velocity, bool isShooting)
     {
         if(!init) { return; } 
 
         var isMoving = Mathf.Abs(velocity.x) > 0.01f;
 
         animator.SetBool(isMovingHash, isMoving);
+        animator.SetBool(isShootingHash, isShooting);
 
         FlipCharacter(velocity);
     }

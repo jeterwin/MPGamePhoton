@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
@@ -37,7 +36,8 @@ public class NetworkRunnerController : MonoBehaviour, INetworkRunnerCallbacks
             GameMode = mode,
             SessionName = roomName,
             PlayerCount = 4,
-            SceneManager = networkRunnerInstance.GetComponent<INetworkSceneManager>()
+            SceneManager = networkRunnerInstance.GetComponent<INetworkSceneManager>(),
+            ObjectPool = networkRunnerInstance.GetComponent<GamePoolingManager>()
         };
 
         var result = await networkRunnerInstance.StartGame(startGameArgs);
