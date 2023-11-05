@@ -12,7 +12,7 @@ public class LoadingCanvasController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        networkRunnerController = GlobalManagers.Instance.networkRunnerController;
+        networkRunnerController = GlobalManagers.Instance.NetworkRunnerController;
         networkRunnerController.OnStartedRunnerConnection += networkRunnerOnStartedRunnerConnection;
         networkRunnerController.OnPlayerJoinedSucessfully += networkRunnerOnPlayerJoinedSucessfully;
 

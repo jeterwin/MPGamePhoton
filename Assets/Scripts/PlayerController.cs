@@ -7,6 +7,12 @@ using UnityEngine;
 
 public class PlayerController : NetworkBehaviour, IBeforeUpdate
 {
+    public bool AcceptAnyInput => IsPlayerAlive && !GameManager.MatchIsOver;
+
+    [SerializeField] private GameObject groundCheckPoint;
+    [SerializeField] private float groundCheckHeight;
+    [SerializeField] private LayerMask groundMask;
+
     [SerializeField] private GameObject localCamera;
     [SerializeField] private TextMeshProUGUI playerNickname;
     [SerializeField] private float movementSpeed = 1f;
@@ -19,6 +25,7 @@ public class PlayerController : NetworkBehaviour, IBeforeUpdate
 
     [Networked] private NetworkButtons buttons { get; set; }
 
+    private bool isGrounded = false;
     private float horizontal;
     private Rigidbody2D rb;
     private PlayerWeaponController weaponController;
@@ -34,10 +41,11 @@ public class PlayerController : NetworkBehaviour, IBeforeUpdate
         visualController = GetComponent<PlayerVisualController>();
         healthController = GetComponent<PlayerHealthController>();
 
-        if(Object.HasInputAuthority)
+        if(Object.IsValid == Object.HasInputAuthority)
         {
+            localCamera.transform.SetParent(null);
             localCamera.SetActive(true);
-            RpcSetNickname(GlobalManagers.Instance.networkRunnerController.LocalPlayerName);
+            RpcSetNickname(GlobalManagers.Instance.NetworkRunnerController.LocalPlayerName);
         }
         else
         {
@@ -60,29 +68,39 @@ public class PlayerController : NetworkBehaviour, IBeforeUpdate
     }
     private void checkJumpInput(PlayerData input)
     {
+        isGrounded = (bool)Runner.GetPhysicsScene2D().OverlapBox(groundCheckPoint.transform.position,
+            groundCheckPoint.transform.localScale, 0, groundMask);
+
+        if(!isGrounded) { return; }
+
         var pressed = input.NetworkButtons.GetPressed(buttons);
         if(pressed.WasPressed(buttons, PlayerInputButtons.Jump))
         {
             rb.AddForce(JumpForce * Vector2.up, ForceMode2D.Impulse);
         }
-
-        buttons = input.NetworkButtons;
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(groundCheckPoint.transform.position, groundCheckPoint.transform.localScale);
     }
     public override void FixedUpdateNetwork()
     {
         checkRespawnTimer();
 
         //if(Runner.TryGetInputForPlayer<PlayerData>(Object.InputAuthority, out var input))
-        if(GetInput(out PlayerData input) && IsPlayerAlive)
+        if(GetInput(out PlayerData input) && AcceptAnyInput)
         {
             rb.velocity = new Vector2(input.HorizontalInput * movementSpeed, rb.velocity.y);
 
             checkJumpInput(input);
+
+            buttons = input.NetworkButtons;
         }
     }
     public void BeforeUpdate()
     {
-        if(Object.HasInputAuthority && IsPlayerAlive)
+        if(Object.HasInputAuthority && AcceptAnyInput)
         {
             horizontal = Input.GetAxisRaw("Horizontal");
         }
@@ -126,6 +144,11 @@ public class PlayerController : NetworkBehaviour, IBeforeUpdate
         data.NetworkButtons.Set(PlayerInputButtons.Jump, Input.GetKey(KeyCode.Space));
         data.NetworkButtons.Set(PlayerInputButtons.Shoot, Input.GetButton("Fire1"));
         return data;
+    }
+    public override void Despawned(NetworkRunner runner, bool hasState)
+    {
+        GlobalManagers.Instance.PoolingManager.RemoveNetworkObject(Object);
+        Destroy(gameObject);
     }
     public enum PlayerInputButtons
     {

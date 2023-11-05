@@ -3,7 +3,9 @@ using UnityEngine;
 public class GlobalManagers : MonoBehaviour
 {
     public static GlobalManagers Instance;
-    [field: SerializeField] public NetworkRunnerController networkRunnerController { get; private set; }
+    public GamePoolingManager PoolingManager;
+    public GameManager GameManager;
+    [field: SerializeField] public NetworkRunnerController NetworkRunnerController { get; private set; }
 
     [SerializeField] private GameObject parentObj;
     private void Awake()

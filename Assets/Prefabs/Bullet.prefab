@@ -155,7 +155,7 @@ MonoBehaviour:
     m_Bits: 64
   damage: 10
   bulletSpeed: 20
-  bulletLifetime: 3
+  bulletLifetime: 1
 --- !u!1 &7768534616311857150
 GameObject:
   m_ObjectHideFlags: 0

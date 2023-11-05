@@ -35,7 +35,7 @@ public class UIController : MonoBehaviour
     {
        if(setNicknameInputField.text.Length > 0 && setNicknameInputField.text.Length <= 8)
         {
-            GlobalManagers.Instance.networkRunnerController.SetPlayerNickname(setNicknameInputField.text);
+            GlobalManagers.Instance.NetworkRunnerController.SetPlayerNickname(setNicknameInputField.text);
             joinRoomPanel.SetActive(true);
             createNicknamePanel.SetActive(false);
         }
@@ -43,13 +43,13 @@ public class UIController : MonoBehaviour
 
     public void JoinRandomRoom()
     {
-        GlobalManagers.Instance.networkRunnerController.StartGame(GameMode.AutoHostOrClient, string.Empty);
+        GlobalManagers.Instance.NetworkRunnerController.StartGame(GameMode.AutoHostOrClient, string.Empty);
     }
     public void CreateRoom(GameMode mode, string field)
     {
         if(field.Length >= 2)
         {
-            GlobalManagers.Instance.networkRunnerController.StartGame(mode, field);
+            GlobalManagers.Instance.NetworkRunnerController.StartGame(mode, field);
         }
     }
 }

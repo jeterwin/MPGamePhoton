@@ -25,14 +25,14 @@ public class PlayerWeaponController : NetworkBehaviour, IBeforeUpdate
 
     [Networked] private TickTimer shootCooldown { get; set; }
 
-    private PlayerController weaponController;
+    private PlayerController playerController;
     public override void Spawned()
     {
-        weaponController = GetComponent<PlayerController>();
+        playerController = GetComponent<PlayerController>();
     }
     public void BeforeUpdate()
     {
-        if(Object.HasInputAuthority && weaponController.IsPlayerAlive)
+        if(Object.HasInputAuthority && playerController.AcceptAnyInput)
         {
 	        Vector2 positionOnScreen = cam.WorldToViewportPoint(transform.position);
 		
@@ -52,12 +52,21 @@ public class PlayerWeaponController : NetworkBehaviour, IBeforeUpdate
     public override void FixedUpdateNetwork()
     {
         //if(GetInput(out PlayerData input))
-        if(Runner.TryGetInputForPlayer<PlayerData>(Object.InputAuthority, out var input) && weaponController.IsPlayerAlive)
+        if(Runner.TryGetInputForPlayer<PlayerData>(Object.InputAuthority, out var input))
         {
-            checkShootingInput(input);
-            currentPlayerRotation = input.GunPivotRotation;
+            if(playerController.AcceptAnyInput)
+            {
+                checkShootingInput(input);
+                currentPlayerRotation = input.GunPivotRotation;
 
-            buttonsPrev = input.NetworkButtons;
+                buttonsPrev = input.NetworkButtons;
+            }
+            else
+            {
+                IsHoldingShoot = false;
+                playMuzzleEffect = false;
+                buttonsPrev = default;
+            }
         }
 
         pivotToRotate.rotation = currentPlayerRotation;

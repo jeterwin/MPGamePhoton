@@ -472,7 +472,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60b5c5e053f13b14fb0e4c8c4f27ede2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <networkRunnerController>k__BackingField: {fileID: 270513123}
+  PoolingManager: {fileID: 0}
+  GameManager: {fileID: 0}
+  <NetworkRunnerController>k__BackingField: {fileID: 270513123}
   parentObj: {fileID: 1401064456}
 --- !u!223 &3481383398657586032
 Canvas:
